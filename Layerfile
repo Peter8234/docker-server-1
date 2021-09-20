@@ -13,15 +13,7 @@ RUN apt-get update && \
 
 # copy files from the repository into this staging server
 COPY . .
-
 # expose docker locally
-RUN sudo mkdir -p /etc/systemd/system/docker.service.d
-# Create a new file to store the daemon options.
-RUN echo $'[Service] \nExecStart=\nExecStart=/usr/bin/dockerd -H unix:// -H tcp://0.0.0.0:2375' > /etc/systemd/system/docker.service.d/options.conf
-# Reload the systemd daemon.
-RUN sudo systemctl daemon-reload
-# Restart Docker.
-RUN sudo systemctl restart docker
 RUN docker build -t image .
 RUN docker run -d -p 8080:8080 image
 EXPOSE WEBSITE http://localhost:8080
